@@ -1,0 +1,5 @@
+data/
+qc/
+ref_files/
+.DS_Store
+.snakemake
