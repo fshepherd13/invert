@@ -14,7 +14,7 @@ Step 2. Map reads to host genome, filter non-hits
 -Inputs: 
     Trimmed fastq files, R1 and R2
 -Params:
-    Host (virus?) genome annotation file
+    Host+virus genome annotation file
 - Outputs:
     Aligned BAM file per sample
     Mapping statistics
@@ -64,7 +64,7 @@ Step 4. Count reads mapped to  cRNA and mRNA at the 3’ end among all positive 
     Use grep to find the cRNA segments from the merged bam file (looks for "AAAAACG" type pattern, 5 A's plus 2 other nucleotides)
     Use grep to find the mRNA segments from the merged files (looks for "AAAAAAA" polyA tail)
     Writes results of read counts of mRNA and cRNA to a "cmRatio.txt" file
-    Calculates ratio (not in Thu's github code, but in her methods description)
+    Calculates ratio (not in Thu's github code, but in her methods description-- awk command)
 
 -Outputs
     "cmRatio.txt" file with table
