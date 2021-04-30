@@ -5,7 +5,9 @@ SAMPLES = config["samples"]
 
 rule all:
     input: 
-        expand("assembly/{sample}/{sample}_transcripts.gtf", sample=SAMPLES)
+        expand("assembly/{sample}/{sample}_transcripts.gtf", sample=SAMPLES),
+        expand("qc/{sample}_R1_trimmed_fastqc.html", sample = SAMPLES),
+        expand("qc/{sample}_R1_trimmed_fastqc.html", sample = SAMPLES)
 
 rule trimmomatic_pe:
     message:
@@ -27,6 +29,14 @@ rule trimmomatic_pe:
         2
     wrapper:
         "0.74.0/bio/trimmomatic/pe"
+
+rule fastqc:
+    input:
+        r1="tmp/{sample}_R1_trimmed.fastq.gz",
+        r2="tmp/{sample}_R2_trimmed.fastq.gz"
+    output:
+        r1="qc/{sample}_R1_trimmed_fastqc.html",
+        r2="qc/{sample}_R2_trimmed_fastqc.html"
 
 rule map_reads:
     message:
