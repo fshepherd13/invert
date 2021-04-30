@@ -1,25 +1,30 @@
 #Create tmp directory to hold trimmed files? Can be cleared after pipeline runs to make room
-configfile = config.yaml
+configfile: "./config.yaml"
+IN_DIR = config["in_dir"]
+SAMPLES = config["samples"]
 
 rule all:
-    input: "{sample}_Aligned.sortedByCoord.out.bam"
+    input: 
+        expand("{sample}_Aligned.sortedByCoord.out.bam", sample=SAMPLES)
 
 rule trimmomatic_pe:
     message:
         """
         Pre-processing raw reads with trimmomatic. Trimming low quality reads and adapter sequences. Running QC on trimmed reads.
-        """"
+        """
     input:
-        r1 = expand("{in_dir}/{{sample}}_R1_001.fastq.gz", in_dir=config["in_dir"]),
-        r2 = expand("{in_dir}/{{sample}}_R2_001.fastq.gz", in_dir=config["in_dir"])
+        r1 = f"{IN_DIR}/{{sample}}_R1_001.fastq.gz",
+        r2 = f"{IN_DIR}/{{sample}}_R2_001.fastq.gz"
     params:
-        extra = config["paramters"]["illuminaclip"],
-        trimmer = ["SLIDINGWINDOW:4:20"]
+        trimmer = config["parameters"]["trim"],
+        extra = ""
     output:
         r1 = "tmp/{sample}_R1_trimmed.fastq.gz",
         r2 = "tmp/{sample}_R2_trimmed.fastq.gz",
         r1_unpaired = "tmp/{sample}_R1_unpaired_trimmed.fastq.gz",
         r2_unpaired = "tmp/{sample}_R2_unpaired_trimmed.fastq.gz"
+    threads:
+        2
     wrapper:
         "0.74.0/bio/trimmomatic/pe"
 
