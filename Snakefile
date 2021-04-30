@@ -5,7 +5,7 @@ SAMPLES = config["samples"]
 
 rule all:
     input: 
-        expand("{sample}_Aligned.sortedByCoord.out.bam", sample=SAMPLES)
+        expand("assembly/{sample}/{sample}_transcripts.gtf", sample=SAMPLES)
 
 rule trimmomatic_pe:
     message:
@@ -61,5 +61,22 @@ rule map_reads:
             --runMode alignReads \
             --genomeDir ./index \
             --readFilesIn {input.r1} {input.r2}
+        """
+
+rule cufflinks:
+    input:
+        bam="{sample}_Aligned.sortedByCoord.out.bam"
+    output:
+        gtf="assembly/{sample}/{sample}_transcripts.gtf",
+    params:
+        gtf=config["annotation_file"]
+    threads: 4
+    shell:
+        """
+        cufflinks \
+            {input.bam} \
+            --num-threads {threads} \
+            -g {params.gtf} \
+            -o assembly/{wildcards.sample} \
         """
 
