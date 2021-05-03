@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=16
+#SBATCH --time=0:45:00
+#SBATCH --mail-type=ALL
+#SBATCH --mem=50g
+#SBATCH --mail-user=sheph085@umn.edu
+
+source activate invert
+
+cd ref_files
+mkdir cal09_human_star_index
+
+STAR --runThreadN 16 \
+--runMode genomeGenerate \
+--genomeDir ./cal09_human_star_index \
+--genomeFastaFiles ./cal09_human/GRCh38.103_Cal09.fa \
+--sjdbGTFfile ./cal09_human/GRCh38.103_Cal09.gtf \
+--sjdbOverhang 149
