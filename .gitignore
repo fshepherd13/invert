@@ -4,3 +4,7 @@ ref_files/
 .DS_Store
 .snakemake
 *.svg
+*STARgenome/
+*STARtmp/
+*Log.out
+*Log.progress.out
