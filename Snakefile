@@ -5,7 +5,7 @@ SAMPLES = config["samples"]
 
 rule all:
     input: 
-        expand("assembly/{sample}/{sample}_transcripts.gtf", sample=SAMPLES),
+        expand("cufflinks/{sample}/transcripts.gtf", sample=SAMPLES),
         expand("qc/{sample}_R1_trimmed_fastqc.html", sample = SAMPLES),
         expand("qc/{sample}_R1_trimmed_fastqc.html", sample = SAMPLES)
 
@@ -76,6 +76,7 @@ rule map_reads:
             --outSAMtype BAM SortedByCoordinate \
             --runMode alignReads \
             --genomeDir {params.star_index} \
+            --readFilesCommand zcat \
             --readFilesIn {input.r1} {input.r2}
         """
 
@@ -83,18 +84,20 @@ rule cufflinks:
     input:
         bam="{sample}_Aligned.sortedByCoord.out.bam"
     output:
-        gtf="assembly/{sample}/{sample}_transcripts.gtf",
+        gtf="cufflinks/{sample}/transcripts.gtf",
+        iso="cufflinks/{sample}/isoforms.fpkm_tracking",
+        genes="cufflinks/{sample}/genes.fpkm_tracking"
     params:
         gtf=config["annotation_file"],
         fasta=config["ref_genome"]
     threads: 4
     shell:
         """
+        mkdir -p cufflinks/{wildcards.sample}
         cufflinks \
             {input.bam} \
-            {params.fasta} \
             --num-threads {threads} \
             -g {params.gtf} \
-            -o assembly/{wildcards.sample} \
+            -o cufflinks/{wildcards.sample} \
         """
 
