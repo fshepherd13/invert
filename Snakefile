@@ -5,6 +5,8 @@ SAMPLES = config["samples"]
 
 rule all:
     input: 
+        expand("invert_results/{sample}/{sample}_fwd.bam", sample=SAMPLES),
+        expand("invert_results/{sample}/{sample}_rev.bam", sample=SAMPLES),
         expand("cufflinks/{sample}/transcripts.gtf", sample=SAMPLES),
         expand("qc/{sample}_R1_trimmed_fastqc.html", sample = SAMPLES),
         expand("qc/{sample}_R1_trimmed_fastqc.html", sample = SAMPLES)
