@@ -100,5 +100,40 @@ rule cufflinks:
             --num-threads {threads} \
             -g {params.gtf} \
             -o cufflinks/{wildcards.sample} \
+            --library-type fr-firststrand
         """
 
+rule strand_separation:
+    input:
+        bam="star_mapping/{sample}Aligned.sortedByCoord.out.bam"
+    output:
+        fwd1.bam = "invert_results/{sample}/{sample}_fwd1.bam",
+        fwd2.bam = "invert_results/{sample}/{sample}_fwd2.bam",
+        fwd.bam = "invert_results/{sample}/{sample}_fwd.bam",
+        rev1.bam = "invert_results/{sample}/{sample}_rev1.bam",
+        rev2.bam = "invert_results/{sample}/{sample}_rev2.bam",
+        rev.bam = "invert_results/{sample}/{sample}_rev.bam"
+    shell:
+        """
+        #Forward strand
+        # 1. alignments of the second in pair if they map to the forward strand
+        samtools view -b -f 128 -F 16 {input.bam} > {output.fwd1.bam}
+
+        # 2. alignments of the first in pair if they map to the reverse  strand 
+        samtools view -b -f 80 {input.bam} > {output.fwd2.bam}
+        
+        # Combine alignments that originate on the forward strand.
+        samtools merge -f {output.fwd.bam} {output.fwd1.bam} {output.fwd2.bam}
+        samtools index {output.fwd.bam}
+
+        # Reverse strand
+        # 1. alignments of the second in pair if they map to the reverse strand
+        samtools view -b -f 144 {input.bam} > {output.rev1.bam}
+
+        # 2. alignments of the first in pair if they map to the forward strand
+        samtools view -b -f 64 -F 16 {input.bam} > {output.rev2.bam}
+
+        # Combine alignments that originate on the reverse strand.
+        samtools merge -f {output.rev.bam} {output.rev1.bam} {output.rev2.bam}
+        samtools index {output.rev.bam}
+        """
