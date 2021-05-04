@@ -1,9 +1,10 @@
 #Config file to accompany invert snakemake pipeline
 
 in_dir: data #Directory containing raw fastq files from RNAseq
-samples: 4_12hr_Ciliated_4_S4
-annotation_file: ref_files/Homo_sapiens.GRCh38.103.gtf #Directory containing the viral host genome annotation in .gtf format
-# genome_index: #Directory containing indices of each influenza 
+samples: 4_12hr_Ciliated_4_S4_sub
+annotation_file: ref_files/cal09_human/GRCh38.103_Cal09.gtf #Directory containing the viral host genome annotation in .gtf format
+ref_genome: ref_files/cal09_human/GRCh38.103_Cal09.fa # reference genome of combined host + virus
+genome_index: "ref_files/cal09_human_star_index" #directory containin concatenated human+virus genome, indexed by STAR
 
 parameters:
   trim: [ILLUMINACLIP:ref_files/TruSeq3-PE-2.fa:2:30:10 TRAILING:3] #Directory containing illumina adapter sequences that should be trimmed
