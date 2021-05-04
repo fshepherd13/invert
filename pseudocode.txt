@@ -1,6 +1,6 @@
 Will use snakemake pipeline with Thu's bash code
 
-Step 1. Preprocess raw read files
+Step 1. Preprocess raw read files-done
 - FASTQC
 - bbmap probably for adapter trimming (requires input for adapter sequences)
 - Inputs:
@@ -10,7 +10,7 @@ Step 1. Preprocess raw read files
 - Outputs:
     Trimmed fastq files
 
-Step 2. Map reads to host genome, filter non-hits
+Step 2. Map reads to host genome with STAR, filter non-hits-done
 -Inputs: 
     Trimmed fastq files, R1 and R2
 -Params:
@@ -22,7 +22,7 @@ Step 2. Map reads to host genome, filter non-hits
 Step 3. Quantify the transcripts per million from the RNAseq run
 -Inputs: aligned BAM files
 -Params:
-    Genome annotation file 
+    Host+virus genome annotation file 
 -Commands:
     Some sort of isoform quantification tool: cufflinks, HTSeq, featureCounts, RSEM etc
 -Output:
