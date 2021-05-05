@@ -139,3 +139,16 @@ rule strand_separation:
         samtools merge -f {output.rev_bam} {output.rev1_bam} {output.rev2_bam}
         samtools index {output.rev_bam}
         """
+
+rule cmRNA_count:
+    input:
+        bam="invert_results/{sample}/cmrna/{sample}_fwd.bam"
+    output:
+        ratios="invert_results/{sample}/cmrna/{sample}_cmratio.txt"
+    shell:
+        """
+        mkdir -p $(dirname {output.ratios}/)
+        cd dirname {output.ratios}
+
+        cmRNA_count.sh {input.bam} {wildcards.sample} > {output.ratios}
+        """
