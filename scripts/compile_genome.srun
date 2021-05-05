@@ -1,0 +1,55 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=16
+#SBATCH --time=0:45:00
+#SBATCH --mail-type=ALL
+#SBATCH --mem=50g
+#SBATCH --mail-user=sheph085@umn.edu
+
+#################################################################
+# Bash Script for Hybrid Human-influenza Cal09 CoV2 Pipeline
+# Based off of script at https://github.com/heznanda/scrnaseq-hybrid-cov2/blob/master/hybrid_pipeline_bash_script.sh
+# Modified by Frances Shepherd, 26-April-2021
+#################################################################
+
+source activate invert
+#(or conda activate, depending upon system)
+#Within working directory, which I named "ref_files"...
+# 1. Retrieve Cal09 specific genome files and create annotation file (done by hand). 
+# Cal_HA.fa
+# Cal_M.fa
+# Cal_NA.fa
+# Cal_NP.fa
+# Cal_NS.fa
+# Cal_PA.fa
+# Cal_PB1.fa
+# Cal_PB2.fa
+# Annotation file: IAV_Cal09_spliced.gtf
+
+# 2. Download human genome reference files
+# fasta nucleic acid
+wget http://ftp.ensembl.org/pub/release-103/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz #fasta
+wget http://ftp.ensembl.org/pub/release-103/gtf/homo_sapiens/Homo_sapiens.GRCh38.103.gtf.gz  # gtf
+# uncompress files
+gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+gzip -d Homo_sapiens.GRCh38.103.gtf.gz 
+
+# 3. Concatenate influenza + human genome and annotation files
+#Make directory to hold concatenated genome info
+mkdir cal09_human
+#concatenate fasta and gtf files into above directory
+cat *.fa > ./cal09_human/GRCh38.103_Cal09.fa
+
+cat *.gtf > ./cal09_human/GRCh38.103_Cal09.gtf 
+
+# 4. Index combined genome with STAR
+#Make directory to hold star index output files
+mkdir cal09_human_star_index
+
+#run STAR genomeGenerate
+STAR --runThreadN 16 \
+--runMode genomeGenerate \
+--genomeDir ./cal09_human_star_index \
+--genomeFastaFiles ./cal09_human/GRCh38.103_Cal09.fa \
+--sjdbGTFfile ./cal09_human/GRCh38.103_Cal09.gtf \
+--sjdbOverhang 149
