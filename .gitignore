@@ -9,3 +9,6 @@ ref_files/
 *Log.out
 *Log.progress.out
 tmp/
+cufflinks/
+invert_results/
+star_mapping/
