@@ -5,11 +5,9 @@ SAMPLES = config["samples"]
 
 rule all:
     input: 
-        expand("invert_results/{sample}/{sample}_fwd.bam", sample=SAMPLES),
-        expand("invert_results/{sample}/{sample}_rev.bam", sample=SAMPLES),
-        expand("cufflinks/{sample}/transcripts.gtf", sample=SAMPLES),
-        expand("qc/{sample}_R1_trimmed_fastqc.html", sample = SAMPLES),
-        expand("qc/{sample}_R1_trimmed_fastqc.html", sample = SAMPLES)
+        expand("invert_results/{sample}/bam/{sample}_fwd.bam", sample=SAMPLES),
+        expand("invert_results/{sample}/bam/{sample}_rev.bam", sample=SAMPLES),
+        expand("invert_results/{sample}/cmrna/{sample}_cmratio.txt", sample=SAMPLES)
 
 rule trimmomatic_pe:
     message:
@@ -109,12 +107,12 @@ rule strand_separation:
     input:
         bam="star_mapping/{sample}Aligned.sortedByCoord.out.bam"
     output:
-        fwd1_bam = "invert_results/{sample}/{sample}_fwd1.bam",
-        fwd2_bam = "invert_results/{sample}/{sample}_fwd2.bam",
-        fwd_bam = "invert_results/{sample}/{sample}_fwd.bam",
-        rev1_bam = "invert_results/{sample}/{sample}_rev1.bam",
-        rev2_bam = "invert_results/{sample}/{sample}_rev2.bam",
-        rev_bam = "invert_results/{sample}/{sample}_rev.bam"
+        fwd1_bam = "invert_results/{sample}/bam/{sample}_fwd1.bam",
+        fwd2_bam = "invert_results/{sample}/bam/{sample}_fwd2.bam",
+        fwd_bam = "invert_results/{sample}/bam/{sample}_fwd.bam",
+        rev1_bam = "invert_results/{sample}/bam/{sample}_rev1.bam",
+        rev2_bam = "invert_results/{sample}/bam/{sample}_rev2.bam",
+        rev_bam = "invert_results/{sample}/bam/{sample}_rev.bam"
     shell:
         """
         #Forward strand
@@ -142,13 +140,12 @@ rule strand_separation:
 
 rule cmRNA_count:
     input:
-        bam="invert_results/{sample}/cmrna/{sample}_fwd.bam"
+        bam="invert_results/{sample}/bam/{sample}_fwd.bam"
     output:
         ratios="invert_results/{sample}/cmrna/{sample}_cmratio.txt"
     shell:
         """
         mkdir -p $(dirname {output.ratios}/)
-        cd dirname {output.ratios}
 
-        cmRNA_count.sh {input.bam} {wildcards.sample} > {output.ratios}
+        scripts/cmRNA_count.sh {input.bam} {wildcards.sample} {output.ratios}
         """
