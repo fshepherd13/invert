@@ -1,11 +1,18 @@
 import pandas as pd
+import sys
+
+rna_ratios = sys.argv[1]
+splicing = sys.argv[2]
+expression = sys.argv[3]
+out_file = sys.argv[4]
+
 
 #Ratios of mRNA:total mRNA for PB2, PB1, PA, HA, NP, NA, M AND S
-ratios = pd.read_table("../invert_results/4_12hr_Ciliated_4_S4_sub/cmrna/4_12hr_Ciliated_4_S4_sub_cmratio.txt", index_col=0, keep_default_na=False)
+ratios = pd.read_table(rna_ratios, index_col=0, keep_default_na=False)
 
-splice_counts = pd.read_table("../invert_results/4_12hr_Ciliated_4_S4_sub/splice_counts/4_12hr_Ciliated_4_S4_sub_splicing_count.txt")
+splice_counts = pd.read_table(splicing)
 
-expression_levels = pd.read_table("../cufflinks/4_12hr_Ciliated_4_S4_sub/genes.fpkm_tracking.txt", index_col=4, keep_default_na=False)
+expression_levels = pd.read_table(expression, index_col=4, keep_default_na=False)
 
 ############First, perform calculations for M gene############
 #Define c(M2) <-read counts of spliced M2
@@ -107,4 +114,4 @@ d['M2'] = results.loc['M', 'TPM_positive_sense'] * (f_M) * results.loc['M', 'mrn
 #Map the full dictionary back to the results dataframe
 results['mrna_TPM'] = results.index.map(d)
 
-results.to_csv("../invert_results/4_12hr_Ciliated_4_S4_sub/results.csv")
+results.to_csv(out_file)
