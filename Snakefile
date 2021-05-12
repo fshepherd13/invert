@@ -10,7 +10,10 @@ rule all:
         expand("invert_results/{sample}/bam/{sample}_fwd.bam", sample=SAMPLES),
         expand("invert_results/{sample}/bam/{sample}_rev.bam", sample=SAMPLES),
         expand("invert_results/{sample}/cmrna/{sample}_cmratio.txt", sample=SAMPLES),
-        expand("invert_results/{sample}/splice_counts/{sample}_splicing_count.txt", sample=SAMPLES)
+        expand("invert_results/{sample}/splice_counts/{sample}_splicing_count.txt", sample=SAMPLES),
+        expand("tmp/{sample}_{direction}_trimmed.fastq.gz", sample=SAMPLES, direction = ["R1", "R2"]),
+        expand("qc/{sample}_{direction}_trimmed_fastqc.html", sample=SAMPLES, direction = ["R1", "R2"]),
+
 
 rule trimmomatic_pe:
     message:
