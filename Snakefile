@@ -168,7 +168,7 @@ rule kinetics_calculations:
     input:
         ratios="invert_results/{sample}/cmrna/{sample}_cmratio.txt",
         splice_counts="invert_results/{sample}/splice_counts/{sample}_splicing_count.txt",
-        expression_levels="cufflinks/{sample}/genes.fpkm_tracking.txt"
+        expression_levels="cufflinks/{sample}/genes.fpkm_tracking"
     output:
         "invert_results/{sample}/{sample}_final_results.csv"
     shell:
