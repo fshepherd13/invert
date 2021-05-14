@@ -95,8 +95,7 @@ rule cufflinks:
         iso="cufflinks/{sample}/isoforms.fpkm_tracking",
         genes="cufflinks/{sample}/genes.fpkm_tracking"
     params:
-        gtf=config["annotations"]["iav_only"],
-        fasta=config["ref_genome"]["iav_only"]
+        gtf=config["annotations"]["iav_only"]
     threads: 4
     shell:
         """
@@ -104,7 +103,7 @@ rule cufflinks:
         cufflinks \
             {input.bam} \
             --num-threads {threads} \
-            -g {params.gtf} \
+            -G {params.gtf} \
             -o cufflinks/{wildcards.sample} \
             --library-type fr-firststrand
         """
