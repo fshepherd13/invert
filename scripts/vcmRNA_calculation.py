@@ -14,11 +14,12 @@ splice_counts = pd.read_table(splicing)
 
 expression_levels = pd.read_table(expression, index_col=4, keep_default_na=False)
 
-############First, perform calculations for M gene############
-#Define c(M2) <-read counts of spliced M2
+############First, perform calculations necessary for M transcript quantification############
+#Define c(M2) <-read counts of spliced M2.
+#Takes difference in read depth at right and left splice junctions (to get the depth of spliced transcript), and averages them.
 cM2 = (1/2)*((splice_counts['Depth_total_left'].values[0] - splice_counts['Depth_unspliced_left'].values[0]) + (splice_counts['Depth_total_right'].values[0] - splice_counts['Depth_unspliced_right'].values[0]))
 
-#Define c(mM) <- read counts of total mRNA of M gene
+#Define c(mM) <- read counts of total mRNA of M gene. Takes average read depth at splice junctions where spliced+unspliced transcripts are present, multiplied by ratio of mrna to total positive rna for M
 mrna_total_rna_ratio_m = ratios.loc['M', 'mRNA:total_pos_RNA']
 
 cmM = (1/2)*(splice_counts['Depth_total_left'].values[0] + splice_counts['Depth_total_right'].values[0]) * mrna_total_rna_ratio_m
@@ -26,13 +27,24 @@ cmM = (1/2)*(splice_counts['Depth_total_left'].values[0] + splice_counts['Depth_
 #define "f_M" <- fraction of spliced M2 read counts to total M mRNA read counts:
 f_M = cM2 / cmM
 
+#Calculate l_M <- factor to adjust for length difference between spliced and unspliced transcripts
+l_M = 1027/((splice_counts['Depth_unspliced_left'].values[0]*1027 / splice_counts['Depth_total_left'].values[0]) + (cM2 * 338 / splice_counts['Depth_total_left'].values[0]))
+
 ############Perform same calculations for NS############
+#Define cNEP <- read counts of spliced NEP
+#Takes difference in read depth at right and left splice junctions (to get the depth of spliced transcript), and averages them.
 cNEP = (1/2)*((splice_counts['Depth_total_left'].values[1] - splice_counts['Depth_unspliced_left'].values[1]) + (splice_counts['Depth_total_right'].values[1] - splice_counts['Depth_unspliced_right'].values[1]))
 
+#Define c(mNS) <- read counts of total mRNA of NS gene. Takes average read depth at splice junctions where spliced+unspliced transcripts are present, multiplied by ratio of mrna to total positive rna for NS
 mrna_total_rna_ratio_ns = ratios.loc['NS', 'mRNA:total_pos_RNA']
 cmNS = (1/2)*(splice_counts['Depth_total_left'].values[1] + splice_counts['Depth_total_right'].values[1]) * mrna_total_rna_ratio_ns
 
+#define "f_NS" <- fraction of spliced NEP read counts to total NS mRNA read counts:
 f_NS = cNEP / cmNS
+
+#Calculate l_NS <- factor to adjust for length difference between spliced and unspliced transcripts
+l_NS = 890/((splice_counts['Depth_unspliced_left'].values[0]*890 / splice_counts['Depth_total_left'].values[0]) + (cM2 * 418 / splice_counts['Depth_total_left'].values[0]))
+
 
 #Pull FPKM values for positive sense transcripts
 HA_fpkm = expression_levels.loc['HA', 'FPKM']
@@ -84,14 +96,12 @@ results['vrna_TPM'] = results['TPM_negative_sense']
 #Calculate crna TPM
 results['crna_TPM'] = results['TPM_positive_sense'] / (1-results['mrna:(mrna,crna)_ratio'])
 
-
-#mrna = pd.DataFrame([results.loc['HA', 'TPM_positive_sense'] * results.loc['HA', 'mrna:(mrna,crna)_ratio']]])
-
+#Define function for calculating mRNA read counts by multiplying total positive RNA by mrna:total positive rna ratio
 def mrna_calc(gene):
     mrna = results.loc[str(gene), 'TPM_positive_sense'] * results.loc[str(gene), 'mrna:(mrna,crna)_ratio']
     return mrna
 
-#initialize empty dictionary to hold majority of mrna calculations:
+#initialize empty dictionary to hold mrna TPM calculations. Run the mrna_calc function on all genes except M and NS
 d = dict()
 for x in ['HA', 'NA', 'NP', 'PA', 'PB1', 'PB2']:
     d[x] = mrna_calc(x)
@@ -101,15 +111,15 @@ d['M'] = None
 d['NS'] = None
 
 
-#Calculate mrna for unspliced M1 and NS1:
-d['NS1'] = results.loc['NS', 'TPM_positive_sense'] * (1 - f_NS) * results.loc['NS', 'mrna:(mrna,crna)_ratio']
+#Calculate TPM of mrna for unspliced M1 and NS1: TPM(all positive sense) * ratio of mRNA:positive sense RNA * (1 - ratio of spliced reads:mRNA) * (length correction factor "L")
+d['NS1'] = results.loc['NS', 'TPM_positive_sense'] * (1 - f_NS) * results.loc['NS', 'mrna:(mrna,crna)_ratio'] * l_NS
 
-d['M1'] = results.loc['M', 'TPM_positive_sense'] * (1-f_M) * results.loc['M', 'mrna:(mrna,crna)_ratio']
+d['M1'] = results.loc['M', 'TPM_positive_sense'] * (1-f_M) * results.loc['M', 'mrna:(mrna,crna)_ratio'] * l_M
 
 #Calculate mrna for spliced M2 and NEP:
-d['NEP'] = results.loc['NS', 'TPM_positive_sense'] * f_NS * results.loc['NS', 'mrna:(mrna,crna)_ratio']
+d['NEP'] = results.loc['NS', 'TPM_positive_sense'] * f_NS * results.loc['NS', 'mrna:(mrna,crna)_ratio'] * l_NS
 
-d['M2'] = results.loc['M', 'TPM_positive_sense'] * (f_M) * results.loc['M', 'mrna:(mrna,crna)_ratio']
+d['M2'] = results.loc['M', 'TPM_positive_sense'] * (f_M) * results.loc['M', 'mrna:(mrna,crna)_ratio'] * l_M
 
 #Map the full dictionary back to the results dataframe
 results['mrna_TPM'] = results.index.map(d)
