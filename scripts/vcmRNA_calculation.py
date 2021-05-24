@@ -37,10 +37,10 @@ f_NS = cNEP / cmNS
 #Pull FPKM values for positive sense transcripts
 HA_fpkm = expression_levels.loc['HA', 'FPKM']
 NA_fpkm = expression_levels.loc['NA', 'FPKM']
-M_fpkm = expression_levels.loc['cM_mM1,mM2', 'FPKM']
+M_fpkm = expression_levels.loc['M', 'FPKM']
 NP_fpkm = expression_levels.loc['NP', 'FPKM']
 PA_fpkm = expression_levels.loc['PA', 'FPKM']
-NS_fpkm = expression_levels.loc["cNS_mNS1,mNEP", 'FPKM']
+NS_fpkm = expression_levels.loc['NS', 'FPKM']
 PB1_fpkm = expression_levels.loc["PB1", 'FPKM']
 PB2_fpkm = expression_levels.loc["PB2", 'FPKM']
 
