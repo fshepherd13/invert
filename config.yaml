@@ -1,10 +1,10 @@
 #Config file to accompany invert snakemake pipeline
 
 in_dir: data #Directory containing raw fastq files from RNAseq
-samples: 4_12hr_Ciliated_4_S4_sub
+samples: 4_12hr_Ciliated_4_S4_sample
 annotations:
   combined: ref_files/cal09_human/GRCh38.103_Cal09.gtf #GTF file of concatenated virus + host genomes annotation
-  iav_only: ref_files/cal09/IAV_Cal09_spliced.gtf #GTF file of virus ONLY annotation
+  iav_only: ref_files/cal09/IAV_Cal09.gtf #GTF file of virus ONLY annotation
   
 ref_genome:
   combined: ref_files/cal09_human/GRCh38.103_Cal09.fa # reference genome of combined host + virus
