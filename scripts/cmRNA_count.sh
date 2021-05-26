@@ -33,7 +33,7 @@ mNA=$(samtools view $(dirname $OUTPUT)/NA.bam|awk 'BEGIN {FS="\t"}; {print $10}'
 mM=$(samtools view $(dirname $OUTPUT)/M.bam| awk 'BEGIN {FS="\t"}; {print $10}'|grep "AAAAAAA"|wc -l)
 mNS=$(samtools view $(dirname $OUTPUT)/NS.bam|awk 'BEGIN {FS="\t"}; {print $10}'|grep "AAAAAAA"|wc -l)
 
-echo -e "gene\tmRNA\tcRNA\tmRNA:cRNA" > $OUTPUT
+echo -e "gene\tmRNA\tcRNA\tmRNA:total_pos_rna\tcrna:total_pos_rna" > $OUTPUT
 echo -e "PB2\t$mPB2\t$cPB2" >> $OUTPUT
 echo -e "PB1\t$mPB1\t$cPB1" >> $OUTPUT
 echo -e "PA\t$mPA\t$cPA" >> $OUTPUT
