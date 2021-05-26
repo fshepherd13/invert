@@ -8,7 +8,7 @@ out_file = sys.argv[4]
 
 
 #Ratios of mRNA:total mRNA for PB2, PB1, PA, HA, NP, NA, M AND S
-ratios = pd.read_table(rna_ratios, index_col=0, keep_default_na=False)
+ratios = pd.read_table(rna_ratios, index_col=0, keep_default_na=False, na_values="N/A")
 
 splice_counts = pd.read_table(splicing)
 
@@ -20,7 +20,7 @@ expression_levels = pd.read_table(expression, index_col=4, keep_default_na=False
 cM2 = (1/2)*((splice_counts['Depth_total_left'].values[0] - splice_counts['Depth_unspliced_left'].values[0]) + (splice_counts['Depth_total_right'].values[0] - splice_counts['Depth_unspliced_right'].values[0]))
 
 #Define c(mM) <- read counts of total mRNA of M gene. Takes average read depth at splice junctions where spliced+unspliced transcripts are present, multiplied by ratio of mrna to total positive rna for M
-mrna_total_rna_ratio_m = ratios.loc['M', 'mRNA:total_pos_RNA']
+mrna_total_rna_ratio_m = float(ratios.loc['M', 'mRNA:total_pos_RNA'])
 
 cmM = (1/2)*(splice_counts['Depth_total_left'].values[0] + splice_counts['Depth_total_right'].values[0]) * mrna_total_rna_ratio_m
 
@@ -36,7 +36,7 @@ l_M = 1027/((splice_counts['Depth_unspliced_left'].values[0]*1027 / splice_count
 cNEP = (1/2)*((splice_counts['Depth_total_left'].values[1] - splice_counts['Depth_unspliced_left'].values[1]) + (splice_counts['Depth_total_right'].values[1] - splice_counts['Depth_unspliced_right'].values[1]))
 
 #Define c(mNS) <- read counts of total mRNA of NS gene. Takes average read depth at splice junctions where spliced+unspliced transcripts are present, multiplied by ratio of mrna to total positive rna for NS
-mrna_total_rna_ratio_ns = ratios.loc['NS', 'mRNA:total_pos_RNA']
+mrna_total_rna_ratio_ns = float(ratios.loc['NS', 'mRNA:total_pos_RNA'])
 cmNS = (1/2)*(splice_counts['Depth_total_left'].values[1] + splice_counts['Depth_total_right'].values[1]) * mrna_total_rna_ratio_ns
 
 #define "f_NS" <- fraction of spliced NEP read counts to total NS mRNA read counts:
