@@ -33,7 +33,7 @@ mNA=$(samtools view $(dirname $OUTPUT)/NA.bam|awk 'BEGIN {FS="\t"}; {print $10}'
 mM=$(samtools view $(dirname $OUTPUT)/M.bam| awk 'BEGIN {FS="\t"}; {print $10}'|grep "AAAAAAA"|wc -l)
 mNS=$(samtools view $(dirname $OUTPUT)/NS.bam|awk 'BEGIN {FS="\t"}; {print $10}'|grep "AAAAAAA"|wc -l)
 
-echo -e "gene\tmRNA\tcRNA\tmRNA:total_pos_rna\tcrna:total_pos_rna" > $OUTPUT
+echo -e "gene\tmRNA\tcRNA" > $OUTPUT
 echo -e "PB2\t$mPB2\t$cPB2" >> $OUTPUT
 echo -e "PB1\t$mPB1\t$cPB1" >> $OUTPUT
 echo -e "PA\t$mPA\t$cPA" >> $OUTPUT
@@ -43,4 +43,4 @@ echo -e "NA\t$mNA\t$cNA" >> $OUTPUT
 echo -e "M\t$mM\t$cM" >> $OUTPUT
 echo -e "NS\t$mNS\t$cNS" >> $OUTPUT
 
-awk 'FNR > 1 {$4=$2/($2+$3); $5=$3/($2+$3); print}' $OUTPUT
+awk 'NR==1{$5="mRNA:total_pos_rna"}NR>1{if($2+$3==0) $4 = "N/A"; else $4=$2/($2+$3)}{print}' $OUTPUT > testfile.tmp && mv testfile.tmp $OUTPUT 
