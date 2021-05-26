@@ -43,4 +43,4 @@ echo -e "NA\t$mNA\t$cNA" >> $OUTPUT
 echo -e "M\t$mM\t$cM" >> $OUTPUT
 echo -e "NS\t$mNS\t$cNS" >> $OUTPUT
 
-awk 'NR==1{$5="mRNA:total_pos_RNA"}NR>1{if($2+$3==0) $4 = "N/A"; else $4=$2/($2+$3)}{print}' $OUTPUT > testfile.tmp && mv testfile.tmp $OUTPUT 
+awk 'NR==1{$4="mRNA:total_pos_RNA"}NR>1{if($2+$3==0) $4 = "N/A"; else $4=$2/($2+$3)}{print $1 "\t" $2 "\t" $3 "\t" $4}' $OUTPUT > testfile.tmp && mv testfile.tmp $OUTPUT
