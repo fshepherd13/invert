@@ -1,6 +1,10 @@
 data/
 qc/
-ref_files/
+ref_files/cal09
+ref_files/cal09_human
+ref_files/cal09_human_star_index
+ref_files/humanGRCh38
+ref_files/TruSeq3-PE-2.fa
 .DS_Store
 .snakemake
 *.svg
