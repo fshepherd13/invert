@@ -1,0 +1,16 @@
+Cal_PB2	Langlois_lab	CDS	1	2341	.	+	0	transcript_id "gene-PB2"; gene_id "gene-PB2"; gene_name "PB2";
+Cal_PB2	Langlois_lab	CDS	2	2340	.	-	0	transcript_id "gene-vPB2"; gene_id "gene-vPB2"; gene_name "vPB2";
+Cal_PB1	Langlois_lab	CDS	1	2341	.	+	0	transcript_id "gene-PB1"; gene_id "gene-PB1"; gene_name "PB1";
+Cal_PB1	Langlois_lab	CDS	2	2340	.	-	0	transcript_id "gene-vPB1"; gene_id "gene-vPB1"; gene_name "vPB1";
+Cal_PA	Langlois_lab	CDS	1	2233	.	+	0	transcript_id "gene-PA"; gene_id "gene-PA"; gene_name "PA";
+Cal_PA	Langlois_lab	CDS	2	2232	.	-	0	transcript_id "gene-vPA"; gene_id "gene-vPA"; gene_name "vPA";
+Cal_HA	Langlois_lab	CDS	1	1777	.	+	0	transcript_id "gene-HA"; gene_id "gene-HA"; gene_name "HA";
+Cal_HA	Langlois_lab	CDS	2	1776	.	-	0	transcript_id "gene-vHA"; gene_id "gene-vHA"; gene_name "vHA";
+Cal_NP	Langlois_lab	CDS	1	1565	.	+	0	transcript_id "gene-NP"; gene_id "gene-NP"; gene_name "NP";
+Cal_NP	Langlois_lab	CDS	2	1564	.	-	0	transcript_id "gene-vNP"; gene_id "gene-vNP"; gene_name "vNP";
+Cal_NA	Langlois_lab	CDS	1	1458	.	+	0	transcript_id "gene-NA"; gene_id "gene-NA"; gene_name "NA";
+Cal_NA	Langlois_lab	CDS	2	1457	.	-	0	transcript_id "gene-vNA"; gene_id "gene-vNA"; gene_name "vNA";
+Cal_M	Langlois_lab	CDS	1	1027	.	+	0	transcript_id "gene-M"; gene_id "gene-M"; gene_name "M";
+Cal_M	Langlois_lab	CDS	2	1026	.	-	0	transcript_id "gene-vM"; gene_id "gene-vM"; gene_name "vM";
+Cal_NS	Langlois_lab	CDS	1	890	.	+	0	transcript_id "gene-NS"; gene_id "gene-NS"; gene_name "NS";
+Cal_NS	Langlois_lab	CDS	2	889	.	-	0	transcript_id "gene-vNS"; gene_id "gene-vNS"; gene_name "vNS";
