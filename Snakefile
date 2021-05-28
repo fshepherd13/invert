@@ -1,7 +1,9 @@
+import pandas as pd
+
 #Create tmp directory to hold trimmed files? Can be cleared after pipeline runs to make room
 configfile: "./config.yaml"
 IN_DIR = config["in_dir"]
-SAMPLES = config["samples"]
+SAMPLES = pd.read_table(config["sample_file"])['Sample']
 
 rule all:
     input: 
