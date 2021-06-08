@@ -4,6 +4,7 @@ import pandas as pd
 configfile: "./config.yaml"
 IN_DIR = config["in_dir"]
 SAMPLES = pd.read_table(config["sample_file"])['Sample']
+ANNOT = config["annotations"]["combined"]
 
 rule all:
     input: 
@@ -62,7 +63,7 @@ rule map_reads:
         fq2 = "tmp/{sample}_R2_trimmed.fastq.gz"
     params:
         index= config["genome_index"],
-        extra=f"--sjdbGTFfile ref_files/cal09_human/GRCh38.103_Cal09.gtf \
+        extra=f"--sjdbGTFfile {ANNOT} \
             --sjdbOverhang 149 \
             --outFilterType BySJout \
             --outFilterMultimapNmax 10 \
