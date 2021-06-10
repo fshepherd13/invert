@@ -18,3 +18,8 @@ invert_results/
 star_mapping/
 invert_calculations.xlsx
 logs/
+combine_final_results.py
+*summary.pdf
+*summary.Rmd
+.Rhistory
+combined_invert_results.csv
