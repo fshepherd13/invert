@@ -1,6 +1,6 @@
 #Config file to accompany invert snakemake pipeline
 
-in_dir: data #Directory containing raw fastq files from RNAseq
+in_dir: /panfs/roc/data_release/1/umgc/langlois/novaseq/210331_A00223_0522_AHW3NCDSXY/Langlois_Project_043 #Directory containing raw fastq files from RNAseq
 sample_file: "samples.csv"
 annotations:
   combined: ref_files/cal09_human/GRCh38.103_Cal09.gtf #GTF file of concatenated virus + host genomes annotation
