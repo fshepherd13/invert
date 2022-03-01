@@ -1,9 +1,12 @@
 import pandas as pd
+configfile: "../config/config.yaml"
+SAMPLES = pd.read_csv(config["sample_file"])['Sample']
 
-#Create tmp directory to hold trimmed files? Can be cleared after pipeline runs to make room
-configfile: "./config.yaml"
+include: "rules/common.smk"
+include: "rules/trim.smk"
+
 IN_DIR = config["in_dir"]
-SAMPLES = pd.read_table(config["sample_file"])['Sample']
+ANNOT = config["annotations"]["combined"]
 
 rule all:
     input: 
@@ -15,8 +18,7 @@ rule all:
         expand("invert_results/{sample}/cmrna/{sample}_cmratio.txt", sample=SAMPLES),
         expand("invert_results/{sample}/splice_counts/{sample}_splicing_count.txt", sample=SAMPLES),
         expand("tmp/{sample}_{direction}_trimmed.fastq.gz", sample=SAMPLES, direction = ["R1", "R2"]),
-        expand("qc/{sample}_{direction}_trimmed_fastqc.html", sample=SAMPLES, direction = ["R1", "R2"]),
-
+        expand("qc/{sample}_{direction}_trimmed_fastqc.html", sample=SAMPLES, direction = ["R1", "R2"])
 
 rule trimmomatic_pe:
     message:
@@ -62,7 +64,7 @@ rule map_reads:
         fq2 = "tmp/{sample}_R2_trimmed.fastq.gz"
     params:
         index= config["genome_index"],
-        extra=f"--sjdbGTFfile ref_files/cal09_human/GRCh38.103_Cal09.gtf \
+        extra=f"--sjdbGTFfile {ANNOT} \
             --sjdbOverhang 149 \
             --outFilterType BySJout \
             --outFilterMultimapNmax 10 \
@@ -80,7 +82,7 @@ rule map_reads:
         "star_mapping/{sample}/Aligned.sortedByCoord.out.bam"
     log:
         "logs/star/{sample}.log"
-    threads: 20
+    threads: 24
     wrapper:
         "0.74.0/bio/star/align"
 
@@ -91,9 +93,11 @@ rule cufflinks:
         gtf="cufflinks/{sample}/transcripts.gtf",
         iso="cufflinks/{sample}/isoforms.fpkm_tracking",
         genes="cufflinks/{sample}/genes.fpkm_tracking"
+    log:
+        "logs/cufflinks/{sample}.log"
     params:
         gtf=config["annotations"]["iav_only"]
-    threads: 6
+    threads: 24
     shell:
         """
         mkdir -p cufflinks/{wildcards.sample}
