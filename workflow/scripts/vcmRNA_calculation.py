@@ -15,20 +15,20 @@ splice_counts = pd.read_table(splicing)
 expression_levels = pd.read_table(expression, index_col=4, keep_default_na=False)
 
 ############First, perform calculations necessary for M transcript quantification############
-#Define c(M2) <-read counts of spliced M2.
+#Define M2 <-read counts of spliced M2
 #Takes difference in read depth at right and left splice junctions (to get the depth of spliced transcript), and averages them.
-cM2 = (1/2)*((splice_counts['Depth_total_left'].values[0] - splice_counts['Depth_unspliced_left'].values[0]) + (splice_counts['Depth_total_right'].values[0] - splice_counts['Depth_unspliced_right'].values[0]))
+M2 = (1/2)*((splice_counts['Depth_total_left'].values[0] - splice_counts['Depth_unspliced_left'].values[0]) + (splice_counts['Depth_total_right'].values[0] - splice_counts['Depth_unspliced_right'].values[0]))
 
-#Define c(mM) <- read counts of total mRNA of M gene. Takes average read depth at splice junctions where spliced+unspliced transcripts are present, multiplied by ratio of mrna to total positive rna for M
+#Define c(mM) <- read counts of total mRNA of M gene. Takes average read depth at splice junctions where spliced+unspliced transcripts are present, multiplied by ratio of mRNA to total positive RNA for M
 mrna_total_rna_ratio_m = float(ratios.loc['M', 'mRNA:total_pos_RNA'])
 
 cmM = (1/2)*(splice_counts['Depth_total_left'].values[0] + splice_counts['Depth_total_right'].values[0]) * mrna_total_rna_ratio_m
 
 #define "f_M" <- fraction of spliced M2 read counts to total M mRNA read counts:
-f_M = cM2 / cmM
+f_M = M2 / cmM
 
 #Calculate l_M <- factor to adjust for length difference between spliced and unspliced transcripts
-l_M = 1027/((splice_counts['Depth_unspliced_left'].values[0]*1027 / splice_counts['Depth_total_left'].values[0]) + (cM2 * 338 / splice_counts['Depth_total_left'].values[0]))
+l_M = 1027/((splice_counts['Depth_unspliced_left'].values[0]*1027 / splice_counts['Depth_total_left'].values[0]) + (M2 * 338 / splice_counts['Depth_total_left'].values[0]))
 
 ############Perform same calculations for NS############
 #Define cNEP <- read counts of spliced NEP
@@ -43,7 +43,7 @@ cmNS = (1/2)*(splice_counts['Depth_total_left'].values[1] + splice_counts['Depth
 f_NS = cNEP / cmNS
 
 #Calculate l_NS <- factor to adjust for length difference between spliced and unspliced transcripts
-l_NS = 890/((splice_counts['Depth_unspliced_left'].values[0]*890 / splice_counts['Depth_total_left'].values[0]) + (cM2 * 418 / splice_counts['Depth_total_left'].values[0]))
+l_NS = 890/((splice_counts['Depth_unspliced_left'].values[0]*890 / splice_counts['Depth_total_left'].values[0]) + (M2 * 418 / splice_counts['Depth_total_left'].values[0]))
 
 
 #Pull FPKM values for positive sense transcripts
@@ -87,8 +87,8 @@ results = pd.DataFrame(
 total_FPKM = sum([HA_fpkm, NA_fpkm, M_fpkm, NP_fpkm, PA_fpkm, NS_fpkm, PB1_fpkm, PB2_fpkm, vHA_fpkm, vNA_fpkm, vM_fpkm, vNP_fpkm, vPA_fpkm, vNS_fpkm, vPB1_fpkm, vPB2_fpkm])
 
 #Transform FPKM to TPM for positive and negative sense RNA transcripts
-results['TPM_positive_sense'] = results['FPKM_positive_sense'] / total_FPKM
-results['TPM_negative_sense'] = results['FPKM_negative_sense'] / total_FPKM
+results['TPM_positive_sense'] = (results['FPKM_positive_sense'] / total_FPKM)*(1000000)
+results['TPM_negative_sense'] = (results['FPKM_negative_sense'] / total_FPKM)*(1000000)
 
 #Create column for vRNA TPM counts (same as the direct cufflinks output)
 results['vrna_TPM'] = results['TPM_negative_sense']
