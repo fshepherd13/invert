@@ -1,6 +1,7 @@
 results/*
 workflow/logs/
 workflow/slurm*.out
+√workflow/invert
 */.ipynb_checkpoints/*
 .ipynb_checkpoints/
 data/
