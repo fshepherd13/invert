@@ -2,11 +2,11 @@ rule strand_separation:
     input:
         bam='../results/star/{sample}/{sample}_sorted_Q20.bam'
     output:
-        fwd1_bam = "../results/invert/{sample}/bam/{sample}_fwd1.bam",
-        fwd2_bam = "../results/invert/{sample}/bam/{sample}_fwd2.bam",
+        fwd1_bam = temp("../results/invert/{sample}/bam/{sample}_fwd1.bam"),
+        fwd2_bam = temp("../results/invert/{sample}/bam/{sample}_fwd2.bam"),
         fwd_bam = "../results/invert/{sample}/bam/{sample}_fwd.bam",
-        rev1_bam = "../results/invert/{sample}/bam/{sample}_rev1.bam",
-        rev2_bam = "../results/invert/{sample}/bam/{sample}_rev2.bam",
+        rev1_bam = temp("../results/invert/{sample}/bam/{sample}_rev1.bam"),
+        rev2_bam = temp("../results/invert/{sample}/bam/{sample}_rev2.bam"),
         rev_bam = "../results/invert/{sample}/bam/{sample}_rev.bam"
     conda:
         "../envs/invert.yaml"
