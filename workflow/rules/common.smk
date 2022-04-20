@@ -8,3 +8,6 @@ def get_r1(wildcards):
 
 def get_r2(wildcards):
     return glob.glob(config["in_dir"]+"/"+wildcards.sample+'_*R2*.fastq.gz')
+
+def get_cufflinks_labels(samples):
+    return(",".join(samples))
