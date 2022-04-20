@@ -1,24 +1,26 @@
 rule cufflinks:
     input:
-        bam=rules.star.output
+        bam=expand('../results/star/{sample}/{sample}_sorted_Q20.bam', sample=SAMPLES)
     output:
-        gtf="../results/cufflinks/{sample}/transcripts.gtf",
-        iso="../results/cufflinks/{sample}/isoforms.fpkm_tracking",
-        genes="../results/cufflinks/{sample}/genes.fpkm_tracking"
+        iso="../results/cufflinks/isoforms.fpkm_tracking",
+        genes="../results/cufflinks/genes.fpkm_tracking"
     log:
-        "logs/cufflinks/{sample}.log"
+        "logs/cufflinks/cufflinks.log"
     conda:
         "../envs/cufflinks.yaml"
     params:
-        gtf=config["annotations"]["iav_only"]
-    threads: 24
+        gtf=config["annotations"]["combined"],
+        sample_list=get_cufflinks_labels(SAMPLES)
+    threads:
+        8
     shell:
         """
-        mkdir -p ../results/cufflinks/{wildcards.sample}
-        cufflinks \
-            {input.bam} \
-            --num-threads {threads} \
-            -G {params.gtf} \
-            -o ../results/cufflinks/{wildcards.sample} \
-            --library-type fr-firststrand
+        mkdir -p ../results/cufflinks/
+        cuffdiff -p {threads} \
+            -T \
+            -library-type fr-firststrand \
+            -o ../results/cufflinks/ \
+            -L {params.sample_list} \
+            {params.gtf} \
+            {input.bam} &> {log}
         """
