@@ -8,12 +8,6 @@ include: "rules/star.smk"
 include: "rules/cufflinks.smk"
 include: "rules/invert.smk"
 
-ANNOT = config["annotations"]["combined"]
-
 rule all:
-    input: 
-        expand("../results/invert/{sample}/{sample}_final_results.csv", sample=SAMPLES)
-
-
-
-
+    input:
+        expand('../results/invert/{sample}/{sample}_final_results.csv', sample=SAMPLES)
