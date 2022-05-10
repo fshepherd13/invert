@@ -17,13 +17,27 @@ rule star:
     shell:
         """
         STAR --runThreadN {threads} \
-            --genomeDir {params.index} \
-            --readFilesIn {input.fq1} {input.fq2} \
-            --outSAMtype BAM SortedByCoordinate \
-            --outReadsUnmapped Fastx \
-            --readFilesCommand zcat \
-            --outFileNamePrefix {params.outdir}/{wildcards.sample}_ &> {log}
-        
+         --sjdbGTFfile {params.annotation} \
+         --sjdbOverhang 149 \
+         --outFilterType BySJout \
+         --outFilterMultimapNmax 20 \
+         --readFilesCommand zcat \
+         --alignSJoverhangMin 8 \
+         --alignSJDBoverhangMin 1 \
+         --outFilterMismatchNmax 999 \
+         --outFilterScoreMinOverLread 0 \
+         --outFilterMatchNminOverLread 0 \
+         --outFilterMatchNmin 0 \
+         --alignIntronMin 20 \
+         --alignIntronMax 1000000 \
+         --alignMatesGapMax 1000000 \
+         --outFilterIntronMotifs RemoveNoncanonicalUnannotated \
+         --outSAMtype BAM SortedByCoordinate \
+         --runMode alignReads \
+         --genomeDir {params.index} \
+         --readFilesIn {input.fq1} {input.fq2} \
+         --outFileNamePrefix {params.outdir}/{wildcards.sample}_ &> {log}
+
         rm -rf '../results/star/*/*_STARtmp'
         """
 
