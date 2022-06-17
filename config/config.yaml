@@ -8,11 +8,9 @@ trimmomatic: #Trimmomatic parameters
     other: ILLUMINACLIP:../ref_files/all_illumina_adapters.fa:2:30:10  LEADING:10 TRAILING:10 SLIDINGWINDOW:4:20 MINLEN:38
 
 annotations:
-  combined: /home/langlois/shared/ref_genomes/star_indices/pr8_mdck/PR8_MDCK.gtf #GTF file of concatenated virus + host genomes annotation
-  iav_only: /home/langlois/shared/ref_genomes/star_indices/pr8_mdck/PR8.gtf #GTF file of virus ONLY annotation
+  combined: /path/to/combined/pr8-mdck.gtf #GTF file of concatenated virus + host genomes annotation
   
 ref_genome:
-  combined: /home/langlois/shared/ref_genomes/star_indices/pr8_mdck/PR8_MDCK.fa # reference genome of combined host + virus
-  iav_only: /home/langlois/shared/ref_genomes/star_indices/pr8_mdck/PR8.fasta
+  combined: /path/to/combined/pr8-mdck.fa # reference genome of combined host + virus
 
-genome_index: "/home/langlois/shared/ref_genomes/star_indices/pr8_mdck/index" #directory containin concatenated human+virus genome, indexed by STAR
+genome_index: "/path/to/pr8-mdck_index" #directory containin concatenated human+virus genome, indexed by STAR
