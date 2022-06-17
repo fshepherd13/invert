@@ -1,56 +1,38 @@
 #!/bin/bash
-#SBATCH --nodes=1
-#SBATCH --ntasks=16
-#SBATCH --time=0:45:00
-#SBATCH --mail-type=ALL
-#SBATCH --mem=50g
-#SBATCH --mail-user=sheph085@umn.edu
-
 #################################################################
 # Bash Script for Hybrid Human-influenza Cal09 CoV2 Pipeline
 # Based off of script at https://github.com/heznanda/scrnaseq-hybrid-cov2/blob/master/hybrid_pipeline_bash_script.sh
 # Modified by Frances Shepherd, 26-April-2021
 #################################################################
 
-source activate invert
-#(or conda activate, depending upon system)
-#Within working directory, which I named "ref_files"...
-cd ../ref_files/
-# 1. Retrieve Cal09 specific genome files and create annotation file (done by hand). 
-# Cal_HA.fa
-# Cal_M.fa
-# Cal_NA.fa
-# Cal_NP.fa
-# Cal_NS.fa
-# Cal_PA.fa
-# Cal_PB1.fa
-# Cal_PB2.fa
-# Annotation file: IAV_Cal09.gtf
+module load star/2.7.8a
+#(or install star with conda)
 
-# 2. Download human genome reference files
+# 1. Retrieve IAV specific genome files and create annotation file (done by hand, or included in repo for PR8, see readme). 
+
+# 2. Download host genome reference files (shown here for MDCK/Canis familiaris)
 # fasta nucleic acid
-wget http://ftp.ensembl.org/pub/release-103/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz #fasta
-wget http://ftp.ensembl.org/pub/release-103/gtf/homo_sapiens/Homo_sapiens.GRCh38.103.gtf.gz  # gtf
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/002/285/GCF_000002285.3_CanFam3.1/GCF_000002285.3_CanFam3.1_genomic.fna.gz
+
+# genome annotation
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/002/285/GCF_000002285.3_CanFam3.1/GCF_000002285.3_CanFam3.1_genomic.gtf.gz 
+
 # uncompress files
-gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
-gzip -d Homo_sapiens.GRCh38.103.gtf.gz 
+gzip -d GCF_000002285.3_CanFam3.1_genomic.fna.gz
+gzip -d GCF_000002285.3_CanFam3.1_genomic.gtf.gz
 
-# 3. Concatenate influenza + human genome and annotation files
-#Make directory to hold concatenated genome info
-mkdir cal09_human
-#concatenate fasta and gtf files into above directory
-cat *.fa > ./cal09_human/GRCh38.103_Cal09.fa
-
-cat *.gtf > ./cal09_human/GRCh38.103_Cal09.gtf 
+# 3. Concatenate influenza + host genome and annotation files
+cat *.fa > PR8_MDCK.fa
+cat *.gtf > PR8_MDCK.gtf 
 
 # 4. Index combined genome with STAR
 #Make directory to hold star index output files
-mkdir cal09_human_star_index
+mkdir index
 
 #run STAR genomeGenerate
 STAR --runThreadN 16 \
 --runMode genomeGenerate \
---genomeDir ./cal09_human_star_index \
---genomeFastaFiles ./cal09_human/GRCh38.103_Cal09.fa \
---sjdbGTFfile ./cal09_human/GRCh38.103_Cal09.gtf \
+--genomeDir ./index \
+--genomeFastaFiles PR8_MDCK.fa \
+--sjdbGTFfile PR8_MDCK.gtf \
 --sjdbOverhang 149
