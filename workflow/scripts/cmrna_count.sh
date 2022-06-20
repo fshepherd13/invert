@@ -4,14 +4,14 @@ SAMPLES=$1 #Assign BAM file provided by snakemake rule to variable (path/to/samp
 FILE=$2 #Assign the sample name provided by snakemake rule (sample)
 OUTPUT=$3 #Assign output file path provided by snakemake rule (path/to/sample_cmratio.txt)
 
-samtools view $SAMPLES Cal_PB2:2325-2341  -o $(dirname $OUTPUT)/PB2.bam
-samtools view $SAMPLES Cal_PB1:2326-2341  -o $(dirname $OUTPUT)/PB1.bam
-samtools view $SAMPLES Cal_PA:2217-2233  -o $(dirname $OUTPUT)/PA.bam
-samtools view $SAMPLES Cal_HA:1761-1777  -o $(dirname $OUTPUT)/HA.bam
-samtools view $SAMPLES Cal_NP:1549-1565 -o $(dirname $OUTPUT)/NP.bam
-samtools view $SAMPLES Cal_NA:1443-1458 -o $(dirname $OUTPUT)/NA.bam
-samtools view $SAMPLES Cal_M:1011-1027 -o $(dirname $OUTPUT)/M.bam
-samtools view $SAMPLES Cal_NS:874-890  -o $(dirname $OUTPUT)/NS.bam
+samtools view $SAMPLES EF467818.1:2325-2341  -o $(dirname $OUTPUT)/PB2.bam
+samtools view $SAMPLES EF467819.1:1001-1016  -o $(dirname $OUTPUT)/PB1.bam
+samtools view $SAMPLES EF467820.1:2217-2233  -o $(dirname $OUTPUT)/PA.bam
+samtools view $SAMPLES EF467821.1:1759-1775  -o $(dirname $OUTPUT)/HA.bam
+samtools view $SAMPLES EF467822.1:1549-1565 -o $(dirname $OUTPUT)/NP.bam
+samtools view $SAMPLES EF467823.1:1398-1413 -o $(dirname $OUTPUT)/NA.bam
+samtools view $SAMPLES EF467824.1:1011-1027 -o $(dirname $OUTPUT)/M.bam
+samtools view $SAMPLES EF467817.1:874-890  -o $(dirname $OUTPUT)/NS.bam
 samtools merge -f $(dirname $OUTPUT)/${FILE}_fwd3prime.bam $(dirname $OUTPUT)/{PB2,PB1,PA,HA,NP,NA,M,NS}.bam
 samtools index $(dirname $OUTPUT)/${FILE}_fwd3prime.bam
 
