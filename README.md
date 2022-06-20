@@ -16,15 +16,22 @@ The pipeline requires the following dependencies:
 * pandas
 
 This pipeline runs using snakemake. Each rule contains a conda environment with the software necessary to run it. To run the pipeline, you only need to install snakemake, i.e:
-`conda env create -n snakemake -c bioconda snakemake
-conda activate snakemake`
+`conda env create -n snakemake -c bioconda snakemake`
+`conda activate snakemake`
+
+Each rule will create an isolated conda environment automatically as it runs.
 
 To run the full pipeline, use:
 `snakemake --cores 24` (<-- or however many cores you want Snakemake to utilize)
 
-The user should only have to deal with adjusting the parameters within the `config.yaml` file. For detailed description, see the header "Config file" below.
+You can adjust several parameters within the `config.yaml` file to control how the pipeline runs. For detailed description, see the header "Config file" below.
 
 For further details on using Snakemake, see [here](https://snakemake.readthedocs.io/en/stable/)
+
+## Please read: using other IAV strains with pipeline
+INVERT relies on genome positions within the IAV segments that may differ depending upon what strain is used. For mapping, you must make sure that your IAV reference annotation file matches your strain (see "Preparing the reference files" below.)
+
+Within two scripts, there are samtools view commands that you will need to adjust if you are using something other than the PR8 strain contained in `ref_files/PR8.fa`. In `scripts/cmrna_count.sh`, lines 7-13 extract the 3' end of the IAV segments. Adjust these to match your strain name and 3' positions (in particular the end range, which should span the entirety of the 3' UTR). Within `scripts/cmrna_splicing.sh`, lines 10-22 look for the splice junctions of the M and NS segments. You must also adjust these to match the segment name and splice sites for your strain as these can differ. Apologies that this step is not yet generalized to work with multiple strains.
 
 ## Config file
 #### in_dir
