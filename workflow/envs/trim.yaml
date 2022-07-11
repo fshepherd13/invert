@@ -3,4 +3,4 @@ channels:
     - bioconda
     - default
 dependencies:
-    - trimmomatic=0.39
+    - trimmomatic=0.33
