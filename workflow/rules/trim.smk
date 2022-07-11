@@ -16,7 +16,8 @@ rule trim:
         other = config["trimmomatic"]["other"]
     shell:
         '''
-        trimmomatic PE -threads {params.threads} \
+        trimmomatic PE -phred33 \
+        -threads {params.threads} \
         {input.r1} {input.r2} \
         {output.r1_paired} {output.r1_unpaired} {output.r2_paired} {output.r2_unpaired} \
         {params.other}
