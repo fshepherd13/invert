@@ -12,27 +12,27 @@ rule strand_separation:
         "../envs/invert.yaml"
     shell:
         """
-        #Forward strand
+        #Reverse strand
         # 1. alignments of the second in pair if they map to the forward strand
-        samtools view -b -f 128 -F 16 {input.bam} > {output.fwd1_bam}
+        samtools view -b -f 128 -F 16 {input.bam} > {output.rev1_bam}
 
         # 2. alignments of the first in pair if they map to the reverse  strand 
-        samtools view -b -f 80 {input.bam} > {output.fwd2_bam}
+        samtools view -b -f 80 {input.bam} > {output.rev2_bam}
         
         # Combine alignments that originate on the forward strand.
-        samtools merge -f {output.fwd_bam} {output.fwd1_bam} {output.fwd2_bam}
-        samtools index {output.fwd_bam}
-
-        # Reverse strand
-        # 1. alignments of the second in pair if they map to the reverse strand
-        samtools view -b -f 144 {input.bam} > {output.rev1_bam}
-
-        # 2. alignments of the first in pair if they map to the forward strand
-        samtools view -b -f 64 -F 16 {input.bam} > {output.rev2_bam}
-
-        # Combine alignments that originate on the reverse strand.
         samtools merge -f {output.rev_bam} {output.rev1_bam} {output.rev2_bam}
         samtools index {output.rev_bam}
+
+        # Forward strand
+        # 1. alignments of the second in pair if they map to the reverse strand
+        samtools view -b -f 144 {input.bam} > {output.fwd1_bam}
+
+        # 2. alignments of the first in pair if they map to the forward strand
+        samtools view -b -f 64 -F 16 {input.bam} > {output.fwd2_bam}
+
+        # Combine alignments that originate on the reverse strand.
+        samtools merge -f {output.fwd_bam} {output.fwd1_bam} {output.fwd2_bam}
+        samtools index {output.fwd_bam}
         """
 
 rule cmRNA_count:
