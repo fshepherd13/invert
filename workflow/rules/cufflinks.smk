@@ -18,6 +18,7 @@ rule cufflinks:
         mkdir -p ../results/cuffdiff/
         cuffdiff -p {threads} \
             -T \
+            -max-bundle-frags 20000000 \
             -library-type fr-firststrand \
             -o ../results/cuffdiff/ \
             -L {params.sample_list} \
