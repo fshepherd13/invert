@@ -5,21 +5,21 @@
 # Modified by Frances Shepherd, 26-April-2021
 #################################################################
 
-module load star/2.7.8a
+module load star/2.5.3a
 #(or install star with conda)
 
 # 1. Retrieve IAV specific genome files and create annotation file (done by hand, or included in repo for PR8, see readme). 
 
-# 2. Download host genome reference files (shown here for MDCK/Canis familiaris)
+# 2. Download host genome reference files (shown here for MDCK/Canis familiaris release 101)
 # fasta nucleic acid
-wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/002/285/GCF_000002285.3_CanFam3.1/GCF_000002285.3_CanFam3.1_genomic.fna.gz
+wget http://ftp.ensembl.org/pub/release-100/fasta/canis_lupus_familiaris/dna/Canis_lupus_familiaris.CanFam3.1.dna_rm.toplevel.fa.gz
 
 # genome annotation
-wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/002/285/GCF_000002285.3_CanFam3.1/GCF_000002285.3_CanFam3.1_genomic.gtf.gz 
+wget http://ftp.ensembl.org/pub/release-100/gtf/canis_lupus_familiaris/Canis_lupus_familiaris.CanFam3.1.100.gtf.gz 
 
 # uncompress files
-gzip -d GCF_000002285.3_CanFam3.1_genomic.fna.gz
-gzip -d GCF_000002285.3_CanFam3.1_genomic.gtf.gz
+gzip -d Canis_lupus_familiaris.CanFam3.1.dna_rm.toplevel.fa.gz
+gzip -d Canis_lupus_familiaris.CanFam3.1.100.gtf.gz
 
 # 3. Concatenate influenza + host genome and annotation files
 cat *.fa > PR8_MDCK.fa
@@ -35,4 +35,4 @@ STAR --runThreadN 16 \
 --genomeDir ./index \
 --genomeFastaFiles PR8_MDCK.fa \
 --sjdbGTFfile PR8_MDCK.gtf \
---sjdbOverhang 149
+--sjdbOverhang 49
