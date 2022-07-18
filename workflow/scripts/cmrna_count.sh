@@ -5,7 +5,7 @@ FILE=$2 #Assign the sample name provided by snakemake rule (sample)
 OUTPUT=$3 #Assign output file path provided by snakemake rule (path/to/sample_cmratio.txt)
 
 samtools view $SAMPLES EF467818.1:2325-2341  -o $(dirname $OUTPUT)/PB2.bam
-samtools view $SAMPLES EF467819.1:1001-1016  -o $(dirname $OUTPUT)/PB1.bam
+samtools view $SAMPLES EF467819.1:2326-2341  -o $(dirname $OUTPUT)/PB1.bam
 samtools view $SAMPLES EF467820.1:2217-2233  -o $(dirname $OUTPUT)/PA.bam
 samtools view $SAMPLES EF467821.1:1759-1775  -o $(dirname $OUTPUT)/HA.bam
 samtools view $SAMPLES EF467822.1:1549-1565 -o $(dirname $OUTPUT)/NP.bam
