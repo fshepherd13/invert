@@ -63,8 +63,8 @@ else:
     f_NS = 0
 
 #Calculate l_NS <- factor to adjust for length difference between spliced and unspliced transcripts
-if splice_counts['Depth_unspliced_left'].values[0] != 0 and splice_counts['Depth_total_left'].values[0] != 0:
-    l_NS = 890/((splice_counts['Depth_unspliced_left'].values[0]*890 / splice_counts['Depth_total_left'].values[0]) + (M2 * 418 / splice_counts['Depth_total_left'].values[0]))
+if splice_counts['Depth_unspliced_left'].values[1] != 0 and splice_counts['Depth_total_left'].values[1] != 0:
+    l_NS = 890/((splice_counts['Depth_unspliced_left'].values[1]*890 / splice_counts['Depth_total_left'].values[1]) + (M2 * 418 / splice_counts['Depth_total_left'].values[1]))
 else:
     l_NS = 0
 
