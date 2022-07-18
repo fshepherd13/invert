@@ -18,16 +18,14 @@ rule star:
         """
         STAR --runThreadN {threads} \
          --sjdbGTFfile {params.annotation} \
-         --sjdbOverhang 149 \
+         --sjdbOverhang 49 \
          --outFilterType BySJout \
          --outFilterMultimapNmax 20 \
          --readFilesCommand zcat \
          --alignSJoverhangMin 8 \
          --alignSJDBoverhangMin 1 \
          --outFilterMismatchNmax 999 \
-         --outFilterScoreMinOverLread 0 \
-         --outFilterMatchNminOverLread 0 \
-         --outFilterMatchNmin 0 \
+         --outFilterMismatchNoverReadLmax 0.04 \
          --alignIntronMin 20 \
          --alignIntronMax 1000000 \
          --alignMatesGapMax 1000000 \
